@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التصويت للمشاريع</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      color: #333;
+    }
+    .project {
+      margin: 20px auto;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: white;
+      max-width: 400px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .project h3 {
+      margin: 0 0 10px;
+    }
+    .project button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .project button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .success-message {
+      color: green;
+      margin-top: 20px;
+    }
+    .error-message {
+      color: red;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>التصويت للمشاريع</h1>
+  <p>قم باختيار المشروع الذي تريد التصويت له:</p>
+
+  <!-- المشاريع -->
+  <div class="project" data-project-id="1">
+    <h3>المشروع الأول: الذكاء الاصطناعي</h3>
+    <button onclick="vote(1)">صوت لهذا المشروع</button>
+  </div>
+  <div class="project" data-project-id="2">
+    <h3>المشروع الثاني: الطاقة المتجددة</h3>
+    <button onclick="vote(2)">صوت لهذا المشروع</button>
+  </div>
+  <div class="project" data-project-id="3">
+    <h3>المشروع الثالث: المدن الذكية</h3>
+    <button onclick="vote(3)">صوت لهذا المشروع</button>
+  </div>
+
+  <p class="success-message" id="success-message" style="display:none;">تم تسجيل تصويتك بنجاح!</p>
+  <p class="error-message" id="error-message" style="display:none;">لقد قمت بالتصويت بالفعل!</p>
+
+  <script>
+    // تحقق مما إذا كان الطالب قد صوت بالفعل
+    function hasVoted() {
+      return localStorage.getItem('hasVoted') === 'true';
+    }
+
+    // تسجيل التصويت
+    function vote(projectId) {
+      if (hasVoted()) {
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('success-message').style.display = 'none';
+        return;
+      }
+
+      // تسجيل التصويت في LocalStorage
+      localStorage.setItem('hasVoted', 'true');
+      localStorage.setItem('votedProject', projectId);
+
+      // عرض رسالة النجاح
+      document.getElementById('success-message').style.display = 'block';
+      document.getElementById('error-message').style.display = 'none';
+
+      // تعطيل جميع الأزرار
+      const buttons = document.querySelectorAll('.project button');
+      buttons.forEach(button => button.disabled = true);
+    }
+
+    // تعطيل الأزرار إذا كان الطالب قد صوت بالفعل
+    window.onload = function() {
+      if (hasVoted()) {
+        const buttons = document.querySelectorAll('.project button');
+        buttons.forEach(button => button.disabled = true);
+      }
+    };
+  </script>
+</body>
+</html>
